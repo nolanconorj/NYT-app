@@ -1,13 +1,13 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import "./DeleteBtn.css";
+import "./SaveBtn.css";
 
-class DeleteBtn extends React.Component {
+class SaveBtn extends React.Component {
   
   render () {
     return (
       <button>
-        <span className="delete-btn" onClick={this.props.onClick}>
+        <span className="save-btn" onClick={this.props.onClick}>
         Save Article
       </span>
       </button>
@@ -15,8 +15,8 @@ class DeleteBtn extends React.Component {
   }
 }
 
-DeleteBtn.props = {
+SaveBtn.props = {
   onClick: PropTypes.func
 }
 
-export default DeleteBtn;
+export default SaveBtn;

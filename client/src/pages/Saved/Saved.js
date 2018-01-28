@@ -1,6 +1,6 @@
 import React from "react";
 // import { Link } from "react-router-dom";
-import { Col, Row, Container } from "../../components/Grid";
+import { Col, Container } from "../../components/Grid";
 import Jumbotron from "../../components/Jumbotron";
 import API from "../../utils/API";
 import { List, ListItem } from "../../components/List";
@@ -11,10 +11,8 @@ class Saved extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: [],
-      title: "",
-      date: "",
-      url: ""
+      savedArticles: []
+     
       
     };
     
@@ -22,20 +20,20 @@ class Saved extends React.Component {
   }
 
   componentDidMount() {
-    this.loadArticles();
+    this.loadSavedArticles();
   }
 
-  loadArticles = () => {
+  // Loads all saved books  and sets them to this.state.books
+  loadSavedArticles = () => {
     API.getArticles()
-      .then(res => 
-        this.setState({ articles: res.data, title: "", date: "", url: ""})
-      ) 
+      .then(res =>
+        this.setState({ savedArticles: res.data})
+      )
       .catch(err => console.log(err));
-      
   };
 
   // Deletes a book from the database with a given id, then reloads books from the db
-  saveArticle = (title, date, url) => {
+  saveArticle = (id) => {
     API.saveArticle({
       title: this.state.title,
       date: this.state.date,
@@ -70,18 +68,20 @@ class Saved extends React.Component {
   render() {
     //const { results } = this.props
     return (
+      
     
-      <Container fluid>
-        <Row>
-          <Col size="md-8">
+          <Container fluid>
+            <Col size="md-8">
             <Jumbotron>
+              
+                
               <h1>
-                Supposed to be Saved Articles
+                Saved Articles
                 </h1>
 
-               {this.state.articles.length ? (
+               {this.state.savedArticles.length ? (
               <List>
-                {this.state.articles.map(article => {
+                {this.state.savedArticles.map(article => {
                   return (
                     <ListItem key={article._id}>
                       <ul>
@@ -101,18 +101,21 @@ class Saved extends React.Component {
             ) : (
                 <h3>No Results to Display</h3>
               )}
-                
+             
+            
                 
             </Jumbotron>
-          </Col>
-        </Row>
-        <Row>
-          <Col size="md-8">
-            
-          </Col>
-        </Row>
+            </Col>
+          </Container>
+          
         
-      </Container>
+      
+         
+            
+          
+        
+     
+      
     );
   }
 }

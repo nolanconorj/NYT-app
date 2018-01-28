@@ -39,7 +39,7 @@ const articleFunctions = {
 
 router.get("/api/articles", articleFunctions.findAll)
 
-// router.post("/api/articles", articleFunctions.create)
+router.post("/api/articles", articleFunctions.create)
 
 router.delete("/api/articles/:id", articleFunctions.remove)
 

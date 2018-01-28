@@ -1,67 +1,79 @@
 import React from "react";
 import Jumbotron from "../../components/Jumbotron";
-import DeleteBtn from "../../components/DeleteBtn";
+import SearchJumbotron from "../../components/SearchJumbotron";
+import SaveBtn from "../../components/SaveBtn";
 import API from "../../utils/API";
-import { Col, Row, Container } from "../../components/Grid";
+import { Col, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
 //import { Input, TextArea, FormBtn } from "../../components/Form";
 import SearchForm from "../../components/SearchForm";
+
 
 class Articles extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       articles: [],
+      savedArticles: [],
       beginDate: "",
       endDate: "",
       query: ""
     };
+    
   }
 
   // When the component mounts, load all books and save them to this.state.books
   componentDidMount() {
     this.loadArticles();
+    this.loadSavedArticles();
   }
 
   // Loads all books  and sets them to this.state.books
   loadArticles = () => {
     API.getArticle1()
-      .then(res =>
-        this.setState({ articles: res.data.response.docs })
-      )
-      .catch(err => console.log(err));
+    .then(res =>
+      this.setState({ articles: res.data.response.docs})
+    )
+    .catch(err => console.log(err));
   };
 
-  // Deletes a book from the database with a given id, then reloads books from the db
-  saveArticle = (title, date, url) => {
-    API.saveArticle(title, date, url)
-      .then(res => this.loadArticles())
+  loadSavedArticles = () => {
+    API.getArticles()
+    .then(res =>
+      this.setState({ savedArticles: res.data},
+        console.log(res.data))
+    )
+    .catch(err => console.log(err));
+  };
+  
+  
+
+  // Saves a book from the database with a given id, then reloads books from the db
+  saveArticle = (snippet, date, url) => {
+    API.saveArticle({
+      title: snippet, 
+      date: date, 
+      url: url
+    })
+      .then(res => this.loadSavedArticles(), console.log(snippet), console.log(date), console.log(url)
+    )
+    // API.saveBook({
+    //   title: this.state.title,
+    //   author: this.state.author,
+    //   synopsis: this.state.synopsis
+    // })
+      // .then(res => this.loadSavedBooks())
+      // .catch(err => console.log(err));
+  
       .catch(err => console.log(err));
   };
 
   // Handles updating component state when the user types into the input field
   handleInputChange = event => {
     // this.setState({ 
-    //   query: event.target.value,
-    //   beginDate: event.target.value,
-    //   endDate: event.target.value });
+    
     this.setState({ query: event.target.value });
-    // const value = event.target.value;
-    // const beginDate = event.target.;
-    // const ed = event.target.ed;
-    // if (name === "password") {
-    //   value = value.substring(0, 15);
-    // }
-    // Updating the input's state
-    // this.setState({
-    //   query: value,
-    //   beginDate: bd,
-    //   endDate: ed
-    // });
-    // const { name, value } = event.target;
-    // this.setState({
-    //   [name]: value
-    // });
+   
   };
   handleInputChange2 = event => {
     
@@ -84,8 +96,8 @@ class Articles extends React.Component {
         if (res.data.status === "error") {
           throw new Error(res.data.message);
         }
-        this.setState({ articles: res.data.response.docs, error: "" });
-      })
+        this.setState({ articles: res.data.response.docs, error: "" })
+      }) 
       .catch(err => this.setState({ error: err.message }));
     // event.preventDefault();
     // if (this.state.title && this.state.date) {
@@ -97,14 +109,17 @@ class Articles extends React.Component {
     //     .then(res => this.loadArticles())
     //     .catch(err => console.log(err));
     // }
+    
   };
 
   render() {
     return (
       <div>
       <Container fluid>
-        <Row>
-          <Col size="md-8">
+      <Col size="md-8">
+      <SearchJumbotron>
+        
+          
             
               <h1>Articles Search </h1>
               <SearchForm
@@ -115,8 +130,10 @@ class Articles extends React.Component {
           />
             
             
+          
+          
+          </SearchJumbotron>
           </Col>
-          </Row>
       </Container>
       
       <Container fluid>    
@@ -140,7 +157,8 @@ class Articles extends React.Component {
                           </a>
                         </li>
                       </ul>
-                      <DeleteBtn onClick={() => this.saveArticle(article.title, article.date, article.url)} />
+                      <SaveBtn onClick={() => this.saveArticle(article.snippet, article.pub_date, article.web_url)} />
+                      
                     </ListItem>
                   );
                 })}
@@ -152,6 +170,44 @@ class Articles extends React.Component {
           </Col>
           
         </Container>
+
+        <Container fluid>
+            <Col size="md-8">
+            <Jumbotron>
+              
+                
+              <h1>
+                Saved Articles
+                </h1>
+
+               {this.state.savedArticles.length ? (
+              <List>
+                {this.state.savedArticles.map(article => {
+                  return (
+                    <ListItem key={article._id}>
+                      <ul>
+                        <li>{article.title}
+                         <p></p>
+                          <a href={"/articles/" + article._id}>
+                        
+                          {article.url}
+                          </a>
+                        </li>
+                      </ul>
+                      {/* <DeleteBtn onClick={() => this.saveArticle(article.title, article.date, article.url)} /> */}
+                    </ListItem>
+                  );
+                })}
+              </List>
+            ) : (
+                <h3>No Results to Display</h3>
+              )}
+             
+            
+                
+            </Jumbotron>
+            </Col>
+          </Container>
 
         
       </div>
