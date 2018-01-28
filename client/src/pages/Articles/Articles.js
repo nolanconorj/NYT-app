@@ -57,13 +57,7 @@ class Articles extends React.Component {
     })
       .then(res => this.loadSavedArticles(), console.log(snippet), console.log(date), console.log(url)
     )
-    // API.saveBook({
-    //   title: this.state.title,
-    //   author: this.state.author,
-    //   synopsis: this.state.synopsis
-    // })
-      // .then(res => this.loadSavedBooks())
-      // .catch(err => console.log(err));
+ 
   
       .catch(err => console.log(err));
   };
@@ -151,7 +145,7 @@ class Articles extends React.Component {
                       <ul>
                         <li>{article.snippet}
                          <p></p>
-                          <a href={"/articles/" + article._id}>
+                          <a href={article.web_url}>
                         
                           {article.web_url}
                           </a>
@@ -188,7 +182,7 @@ class Articles extends React.Component {
                       <ul>
                         <li>{article.title}
                          <p></p>
-                          <a href={"/articles/" + article._id}>
+                          <a href={article.web_url}>
                         
                           {article.url}
                           </a>
