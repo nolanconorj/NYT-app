@@ -14,12 +14,16 @@ export default {
     return axios.get(baseUrl + apiKey + "&q=" + query + "&begin_date=" + beginDate + "&end_date=" + endDate);
       // "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=7385cc61de994eb69461da97038cc32a&q=cats&begin_date=20180101&end_date=20180125");
   },
-  // Gets all books
+  // Gets all articles
   getArticles: function () {
     return axios.get("/api/articles");
   },
-  // Saves a book to the database
+  // Saves an article to the database
   saveArticle: function (articleData) {
     return axios.post("/api/articles", articleData);
+  },
+  // Deletes the article with the given id
+  deleteArticle: function (id) {
+    return axios.delete("/api/articles/" + id);
   }
 };

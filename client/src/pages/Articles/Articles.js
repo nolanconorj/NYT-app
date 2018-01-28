@@ -2,6 +2,7 @@ import React from "react";
 import Jumbotron from "../../components/Jumbotron";
 import SearchJumbotron from "../../components/SearchJumbotron";
 import SaveBtn from "../../components/SaveBtn";
+import DeleteBtn from "../../components/DeleteBtn";
 import API from "../../utils/API";
 import { Col, Container } from "../../components/Grid";
 import { List, ListItem } from "../../components/List";
@@ -59,6 +60,12 @@ class Articles extends React.Component {
     )
  
   
+      .catch(err => console.log(err));
+  };
+
+  deleteArticle = id => {
+    API.deleteArticle(id)
+      .then(res => this.loadSavedArticles())
       .catch(err => console.log(err));
   };
 
@@ -188,7 +195,7 @@ class Articles extends React.Component {
                           </a>
                         </li>
                       </ul>
-                      {/* <DeleteBtn onClick={() => this.saveArticle(article.title, article.date, article.url)} /> */}
+                      <DeleteBtn onClick={() => this.deleteArticle(article._id)} />
                     </ListItem>
                   );
                 })}
